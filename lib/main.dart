@@ -16,21 +16,21 @@ class MyApp extends StatelessWidget {
       surfaceTint: Colors.grey[200],
     );
 
-    final themeData = ThemeData(
+    final themData = ThemeData(
       fontFamily: 'Lato',
       colorScheme: colorScheme,
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
-        shadowColor: colorScheme.shadow,
         elevation: 4,
+        shadowColor: colorScheme.shadow,
       ),
     );
 
     return MaterialApp(
       title: 'MyShop',
       debugShowCheckedModeBanner: false,
-      theme: themeData,
+      theme: themData,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('MyShop'),
