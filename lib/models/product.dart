@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-class Product {
+class Product with ChangeNotifier {
   final String? id;
   final String title;
   final String description;
   final double price;
   final String imageUrl;
-  final ValueNotifier<bool> _isFavorite;
+  bool isFavorite;
 
   Product({
     this.id,
@@ -14,24 +14,13 @@ class Product {
     required this.description,
     required this.price,
     required this.imageUrl,
-    bool isFavorite = false,
-  }) : _isFavorite = ValueNotifier(isFavorite);
+    this.isFavorite = false,
+  });
 
-  set isFavorite(bool newValue) {
-    _isFavorite.value = newValue;
-  }
-
-  bool get isFavorite {
-    return _isFavorite.value;
-  }
-
-  ValueNotifier<bool> get isFavoriteListenable {
-    return _isFavorite;
-  }
-
-  // Hàm logic đảo ngược trạng thái trái tim khi click
+  // Hàm lật trạng thái trái tim bằng Provider
   void toggleFavoriteStatus() {
     isFavorite = !isFavorite;
+    notifyListeners(); // Kích hoạt giao diện vẽ lại ngay lập tức
   }
 
   Product copyWith({

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'products_grid.dart';
+import 'user_products_screen.dart'; // Import để chuyển màn hình
 
 enum FilterOptions {
   favorites,
@@ -22,6 +23,14 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       appBar: AppBar(
         title: const Text('MyShop'),
         actions: [
+          // NÚT BẤM CHUYỂN SANG TRANG QUẢN LÝ SẢN PHẨM CỦA USER
+          IconButton(
+            icon: const Icon(Icons.edit_note),
+            tooltip: 'Manage Products',
+            onPressed: () {
+              Navigator.of(context).pushNamed(UserProductsScreen.routeName);
+            },
+          ),
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
               setState(() {

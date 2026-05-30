@@ -1,6 +1,7 @@
-import 'package:myshop/models/product.dart';
+import 'package:flutter/foundation.dart';
+import '../../models/product.dart';
 
-class ProductsManager {
+class ProductsManager with ChangeNotifier {
   final List<Product> _items = [
     Product(
       id: 'p1',

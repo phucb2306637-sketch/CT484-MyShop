@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/models/product.dart';
+import '../../models/product.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   static const routeName = '/product-detail';
@@ -15,7 +15,7 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.title), // Hiển thị tên sản phẩm lên thanh tiêu đề
+        title: Text(product.title),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -23,7 +23,6 @@ class ProductDetailScreen extends StatelessWidget {
             SizedBox(
               height: 300,
               width: double.infinity,
-              // Dùng Image.network kèm headers giả lập trình duyệt để load ảnh từ link mạng của thầy
               child: Image.network(
                 product.imageUrl,
                 fit: BoxFit.cover,

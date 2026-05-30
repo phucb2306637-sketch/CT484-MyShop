@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/shared/products_manager.dart';
+import 'package:provider/provider.dart';
+import 'products_manager.dart';
 import 'product_grid_tile.dart';
 
 class ProductsGrid extends StatelessWidget {
@@ -9,7 +10,7 @@ class ProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsManager = ProductsManager();
+    final productsManager = context.watch<ProductsManager>();
     final products = showLocalValue 
         ? productsManager.favoriteItems 
         : productsManager.items;
@@ -23,7 +24,10 @@ class ProductsGrid extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemBuilder: (ctx, i) => ProductGridTile(products[i]),
+      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+        value: products[i],
+        child: const ProductGridTile(),
+      ),
     );
   }
 }
