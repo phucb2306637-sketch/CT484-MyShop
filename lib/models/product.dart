@@ -29,6 +29,11 @@ class Product {
     return _isFavorite;
   }
 
+  // Hàm logic đảo ngược trạng thái trái tim khi click
+  void toggleFavoriteStatus() {
+    isFavorite = !isFavorite;
+  }
+
   Product copyWith({
     String? id,
     String? title,

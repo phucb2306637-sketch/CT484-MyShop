@@ -2,8 +2,8 @@
 
 Bài tập thực hành CT484, HK3 2025-2026
 
-**MSSV**: ...
+**MSSV**: B2306637
 
-**Họ tên SV**: ...
+**Họ tên SV**: Võ Trọng Phúc
 
-**Lớp học phần**: ...
+**Lớp học phần**: H01

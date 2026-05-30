@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/shared/products_manager.dart';
-import 'package:myshop/ui/products/product_detail_screen.dart';
+import 'package:myshop/ui/products/products_overview_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsManager = ProductsManager();
-    final sampleProduct = productsManager.items[0];
-
     return MaterialApp(
       title: 'My Shop',
       debugShowCheckedModeBanner: false,
@@ -24,8 +20,12 @@ class MyApp extends StatelessWidget {
         ).copyWith(
           secondary: Colors.deepOrange,
         ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.purple,
+          foregroundColor: Colors.white,
+        ),
       ),
-      home: ProductDetailScreen(sampleProduct),
+      home: const ProductsOverviewScreen(),
     );
   }
 }

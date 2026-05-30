@@ -1,9 +1,20 @@
-include: package:flutter_lints/flutter.yaml
+name: myshop
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
 
-formatter:
-  trailing_commas: preserve
+environment:
+  sdk: '>=3.0.0 <4.0.0'
 
-linter:
-  rules:
-    avoid_print: false
-    prefer_single_quotes: true
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
