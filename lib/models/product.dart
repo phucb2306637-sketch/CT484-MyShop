@@ -7,6 +7,10 @@ class Product with ChangeNotifier {
   final double price;
   final String imageUrl;
   bool isFavorite;
+  
+  // THÊM CÁC THUỘC TÍNH MỚI CHO BÀI TẬP TỰ LÀM
+  final List<String> availableSizes;  // Danh sách kích thước (S, M, L, XL...)
+  final List<int> availableColors;    // Danh sách mã màu Hex (ví dụ: 0xFF000000)
 
   Product({
     this.id,
@@ -15,12 +19,14 @@ class Product with ChangeNotifier {
     required this.price,
     required this.imageUrl,
     this.isFavorite = false,
+    // Cấu hình mặc định nếu không truyền vào để tránh lỗi các bước trước
+    this.availableSizes = const ['S', 'M', 'L', 'XL'],
+    this.availableColors = const [0xFFFFFFFFF, 0xFFFF0000, 0xFF0000FF], // Trắng, Đỏ, Xanh
   });
 
-  // Hàm lật trạng thái trái tim bằng Provider
   void toggleFavoriteStatus() {
     isFavorite = !isFavorite;
-    notifyListeners(); // Kích hoạt giao diện vẽ lại ngay lập tức
+    notifyListeners();
   }
 
   Product copyWith({
@@ -30,6 +36,8 @@ class Product with ChangeNotifier {
     double? price,
     String? imageUrl,
     bool? isFavorite,
+    List<String>? availableSizes,
+    List<int>? availableColors,
   }) {
     return Product(
       id: id ?? this.id,
@@ -38,6 +46,8 @@ class Product with ChangeNotifier {
       price: price ?? this.price,
       imageUrl: imageUrl ?? this.imageUrl,
       isFavorite: isFavorite ?? this.isFavorite,
+      availableSizes: availableSizes ?? this.availableSizes,
+      availableColors: availableColors ?? this.availableColors,
     );
   }
 }

@@ -22,6 +22,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/img/
+
   fonts:
     - family: Lato
       fonts:

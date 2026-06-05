@@ -16,7 +16,6 @@ class UserProductsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Products'),
         actions: [
-          // Bắt sự kiện nổ SnackBar khi bấm nút Thêm (+)
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
