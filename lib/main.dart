@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:myshop/ui/products/products_manager.dart';
 
-
 import 'ui/screens.dart';
 
 void main() {
@@ -53,11 +52,29 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/products/:productId',
-          builder: (context, state) {
+          pageBuilder: (context, state) {
             final productId = state.pathParameters['productId']!;
             final product = ProductsManager().findById(productId)!;
-            return SafeArea(
-              child: ProductDetailScreen(product),
+            
+            return CustomTransitionPage(
+              key: state.pageKey,
+              transitionDuration: const Duration(milliseconds: 400),
+              child: SafeArea(
+                child: ProductDetailScreen(product),
+              ),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                final curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeInOutCubic,
+                );
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(curvedAnimation),
+                  child: child,
+                );
+              },
             );
           },
         ),

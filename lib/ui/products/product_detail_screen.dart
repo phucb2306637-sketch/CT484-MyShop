@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
 
@@ -13,14 +14,12 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  // Khởi tạo các biến lưu trữ lựa chọn tạm thời của người dùng trên UI
   String _selectedSize = '';
   int _selectedColor = 0;
   int _quantity = 1;
 
   @override
   void initState() {
-    // Đặt cấu hình mặc định ban đầu dựa trên dữ liệu sản phẩm
     _selectedSize = widget.product.availableSizes.first;
     _selectedColor = widget.product.availableColors.first;
     super.initState();
@@ -28,7 +27,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Sử dụng provider để theo dõi trạng thái trái tim thay đổi
     return ChangeNotifierProvider.value(
       value: widget.product,
       child: Builder(
@@ -38,12 +36,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           return Scaffold(
             appBar: AppBar(
               title: Text(currentProduct.title),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.home),
+                  tooltip: 'Home',
+                  onPressed: () {
+                    context.go('/products');
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.shopping_cart),
+                  tooltip: 'Cart',
+                  onPressed: () {
+                    context.push('/cart');
+                  },
+                ),
+              ],
             ),
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. Khu vực hiển thị ảnh sản phẩm to nét
                   SizedBox(
                     height: 320,
                     width: double.infinity,
@@ -57,13 +70,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   const SizedBox(height: 15),
                   
-                  // Khu vực chứa nội dung text chi tiết
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Giá tiền hiển thị nổi bật
                         Text(
                           '\$${currentProduct.price}',
                           style: TextStyle(
@@ -74,15 +85,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         const SizedBox(height: 10),
                         
-                        // Mô tả sản phẩm
                         Text(
                           currentProduct.description,
                           style: const TextStyle(fontSize: 16, color: Colors.black87),
                         ),
                         const Divider(height: 30, thickness: 1),
 
-                        // YÊU CẦU 2: CHỌN MÀU SẮC, KÍCH THƯỚC, SỐ LƯỢNG
-                        // A. Khu vực chọn Màu sắc (Color Picker)
                         const Text(
                           'Select Color:',
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -117,7 +125,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // B. Khu vực chọn Kích thước (Size Picker)
                         const Text(
                           'Select Size:',
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -155,7 +162,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // C. Khu vực nhập/chọn Số lượng (Quantity Selector)
                         const Text(
                           'Quantity:',
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -186,7 +192,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 80), // Tạo khoảng trống để không bị đè bởi thanh BottomBar
+                        const SizedBox(height: 80),
                       ],
                     ),
                   ),
@@ -194,14 +200,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
             
-            // YÊU CẦU 1: NÚT THÊM VÀO DANH SÁCH YÊU THÍCH (FLOATING BUTTON)
             floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
-                // Thực thi đảo ngược trạng thái trái tim ngay lập tức nhờ Provider
                 currentProduct.toggleFavoriteStatus();
                 
-                // Bắt sự kiện nổ thông báo SnackBar và in Log sạch ra Console cho thầy chấm
                 debugPrint('Toggled Favorite Status for: ${currentProduct.title}');
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -222,7 +225,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
 
-            // YÊU CẦU 3: THANH THÊM VÀO GIỎ HÀNG (BOTTOM APP BAR)
             bottomNavigationBar: BottomAppBar(
               elevation: 10,
               child: Container(
@@ -231,7 +233,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Hiển thị tổng tiền tạm tính dựa trên số lượng chọn
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,7 +244,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ],
                     ),
-                    // Nút nhấn Add to Cart nổ SnackBar bắt sự kiện
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepOrange,
@@ -252,7 +252,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       onPressed: () {
-                        // Bắt sự kiện nổ log và SnackBar đúng yêu cầu đề bài
                         debugPrint('Event triggered: Added $_quantity item(s) of [${currentProduct.title}] (Size: $_selectedSize, Color hex: $_selectedColor) to Cart.');
                         
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
