@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
-import 'product_detail_screen.dart';
 
 class ProductGridTile extends StatelessWidget {
   const ProductGridTile({super.key});
@@ -36,22 +36,16 @@ class ProductGridTile extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => ProductDetailScreen(product),
-              ),
-            );
+            context.push('/products/${product.id}');
           },
           child: Image.network(
             product.imageUrl,
             fit: BoxFit.cover,
-            // Thay đổi User-Agent trống hoặc giả lập app di động hoàn toàn để Pixabay nhả ảnh ra
             headers: const {
               'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36',
               'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
             },
             errorBuilder: (ctx, error, stackTrace) {
-              // Nếu link gốc của thầy vẫn bị Pixabay chặn cứng, tự động dùng ảnh dự phòng để không bị gạch chéo đỏ
               return Container(
                 color: Colors.grey[300],
                 child: const Icon(Icons.image, color: Colors.grey, size: 40),
