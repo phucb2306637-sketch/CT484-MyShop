@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'products_grid.dart';
 import '../shared/app_drawer.dart';
+import '../cart/cart_manager.dart';
 
 enum FilterOptions {
   favorites,
@@ -46,8 +47,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               ),
             ],
           ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
+          ShoppingCartButton(
             onPressed: () {
               context.push('/cart');
             },
@@ -56,6 +56,25 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       ),
       drawer: const AppDrawer(),
       body: ProductsGrid(_showOnlyFavorites),
+    );
+  }
+}
+
+class ShoppingCartButton extends StatelessWidget {
+  const ShoppingCartButton({super.key, this.onPressed});
+
+  final void Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Badge.count(
+        count: CartManager().productCount,
+        child: const Icon(
+          Icons.shopping_cart,
+        ),
+      ),
+      onPressed: onPressed,
     );
   }
 }
