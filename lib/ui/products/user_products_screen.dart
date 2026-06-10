@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../shared/app_drawer.dart';
 import 'products_manager.dart';
 import 'user_product_list_tile.dart';
 
@@ -17,16 +19,12 @@ class UserProductsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Add a product'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              context.push('/my-products/new');
             },
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Consumer<ProductsManager>(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import 'products_manager.dart';
@@ -18,14 +19,11 @@ class UserProductListTile extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: Colors.purple[100],
         child: ClipOval(
-          child: Image.network(
+          child: Image.asset(
             product.imageUrl,
             width: 40,
             height: 40,
             fit: BoxFit.cover,
-            headers: const {
-              'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36',
-            },
             errorBuilder: (ctx, error, stackTrace) {
               return const Icon(Icons.shopping_bag, color: Colors.purple);
             },
@@ -39,12 +37,7 @@ class UserProductListTile extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Go to edit product screen'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                context.push('/my-products/${product.id}/edit');
               },
               color: Theme.of(context).primaryColor,
             ),

@@ -3,14 +3,13 @@ import 'package:provider/provider.dart';
 
 import 'cart_manager.dart';
 import 'cart_item_card.dart';
-
+import '../orders/order_manager.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     final cart = context.watch<CartManager>();
 
     return Scaffold(
@@ -21,9 +20,15 @@ class CartScreen extends StatelessWidget {
         children: <Widget>[
           CartSummary(
             cart: cart,
-            onOrderNowPressed: () {
-              print('An order has been added');
-            },
+            onOrderNowPressed: cart.totalAmount <= 0
+                ? null
+                : () {
+                    context.read<OrdersManager>().addOrder(
+                          cart.products,
+                          cart.totalAmount,
+                        );
+                    cart.clearAllItems();
+                  },
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -34,7 +39,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 }
-
 
 class CartItemList extends StatelessWidget {
   const CartItemList(
@@ -58,7 +62,6 @@ class CartItemList extends StatelessWidget {
     );
   }
 }
-
 
 class CartSummary extends StatelessWidget {
   const CartSummary({

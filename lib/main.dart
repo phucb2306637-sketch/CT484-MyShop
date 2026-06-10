@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:myshop/ui/products/products_manager.dart';
-import 'package:myshop/ui/cart/cart_manager.dart'; // Import thêm file quản lý giỏ hàng
+import 'package:myshop/ui/cart/cart_manager.dart';
 import 'package:myshop/ui/orders/order_manager.dart';
 
 import 'ui/screens.dart';
@@ -98,19 +98,37 @@ class MyApp extends StatelessWidget {
             child: UserProductsScreen(),
           ),
         ),
+        GoRoute(
+          path: '/my-products/new',
+          builder: (context, state) => SafeArea(
+            child: EditProductScreen(null),
+          ),
+        ),
+        GoRoute(
+          path: '/my-products/:productId/edit',
+          builder: (context, state) {
+            final productId = state.pathParameters['productId'];
+            final product = productId != null
+                ? context.read<ProductsManager>().findById(productId)
+                : null;
+            return SafeArea(
+              child: EditProductScreen(product),
+            );
+          },
+        ),
       ],
     );
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => ProductsManager(),
+          create: (_) => ProductsManager(),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => CartManager(), // Thêm vị trí giỏ hàng theo đúng ảnh đề bài
+          create: (_) => OrdersManager(),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => OrdersManager(), 
+          create: (_) => CartManager(),
         ),
       ],
       child: MaterialApp.router(

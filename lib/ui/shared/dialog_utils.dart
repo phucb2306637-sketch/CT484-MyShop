@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
 
+Future<void> showErrorDialog(BuildContext context, String message) {
+  return showDialog<void>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      icon: const Icon(Icons.error),
+      title: const Text('An Error Occurred!'),
+      content: Text(message),
+      actions: <Widget>[
+        ActionButton(
+          onPressed: () {
+            Navigator.of(ctx).pop();
+          },
+        ),
+      ],
+    ),
+  );
+}
+
 Future<bool?> showConfirmDialog(BuildContext context, String message) {
-  return showDialog(
+  return showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(
       icon: const Icon(Icons.warning),
@@ -33,6 +51,7 @@ Future<bool?> showConfirmDialog(BuildContext context, String message) {
     ),
   );
 }
+
 class ActionButton extends StatelessWidget {
   const ActionButton({
     super.key,
