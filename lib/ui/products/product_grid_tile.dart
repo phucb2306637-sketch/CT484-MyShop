@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
+import '../cart/cart_manager.dart';
+import 'products_manager.dart';
 
 class ProductGridTile extends StatelessWidget {
   const ProductGridTile({super.key});
@@ -21,7 +23,11 @@ class ProductGridTile extends StatelessWidget {
             ),
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
-              product.toggleFavoriteStatus();
+              context.read<ProductsManager>().updateProduct(
+                    product.copyWith(
+                      isFavorite: !product.isFavorite,
+                    ),
+                  );
             },
           ),
           title: Text(
@@ -31,20 +37,36 @@ class ProductGridTile extends StatelessWidget {
           trailing: IconButton(
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
-            onPressed: () {},
+            onPressed: () {
+              final cart = context.read<CartManager>();
+              cart.addItem(product);
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: const Text(
+                      'Item added to cart',
+                    ),
+                    duration: const Duration(seconds: 2),
+                    action: SnackBarAction(
+                      label: 'UNDO',
+                      onPressed: () {
+                        cart.removeItem(product.id!);
+                      },
+                    ),
+                  ),
+                );
+            },
           ),
         ),
         child: GestureDetector(
           onTap: () {
             context.push('/products/${product.id}');
           },
-          child: Image.network(
+          child: Image.asset(
             product.imageUrl,
             fit: BoxFit.cover,
-            headers: const {
-              'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36',
-              'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-            },
+            
             errorBuilder: (ctx, error, stackTrace) {
               return Container(
                 color: Colors.grey[300],

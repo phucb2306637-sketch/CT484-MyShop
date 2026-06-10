@@ -8,7 +8,7 @@ class ProductsManager with ChangeNotifier {
       title: 'Red Shirt',
       description: 'A red shirt - it is pretty red!',
       price: 29.99,
-      imageUrl: 'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
+      imageUrl: 'assets/img/red_shirt.jpg',
       isFavorite: true,
       availableSizes: ['M', 'L', 'XL'],
       availableColors: [0xFFFF0000, 0xFF000000],
@@ -18,7 +18,7 @@ class ProductsManager with ChangeNotifier {
       title: 'Trousers',
       description: 'A nice pair of trousers.',
       price: 59.99,
-      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/19/Overzeas_longpocket_jeans.jpg',
+      imageUrl: 'assets/img/Trousers.jpg',
       availableSizes: ['29', '30', '31', '32'],
       availableColors: [0xFF0000FF, 0xFF808080],
     ),
@@ -27,7 +27,7 @@ class ProductsManager with ChangeNotifier {
       title: 'Yellow Scarf',
       description: 'Warm and cozy - exactly what you need for the winter.',
       price: 19.99,
-      imageUrl: 'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
+      imageUrl: 'assets/img/yellow_scarf.jpg',
       availableSizes: ['Free Size'],
       availableColors: [0xFFFFD700, 0xFFFFA500],
     ),
@@ -36,7 +36,7 @@ class ProductsManager with ChangeNotifier {
       title: 'A Pan',
       description: 'Prepare any meal you want.',
       price: 49.99,
-      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Cast-Iron-Pan.jpg',
+      imageUrl: 'assets/img/pan.jpg',
       isFavorite: true,
       availableSizes: ['24cm', '28cm'],
       availableColors: [0xFF333333],
@@ -52,6 +52,31 @@ class ProductsManager with ChangeNotifier {
       return _items.firstWhere((item) => item.id == id);
     } catch (error) {
       return null;
+    }
+  }
+
+  void addProduct(Product product) {
+    _items.add(
+      product.copyWith(
+        id: 'p\${DateTime.now().toIso6601String()}', 
+      ),
+    );
+    notifyListeners();
+  }
+
+  void updateProduct(Product product) {
+    final index = _items.indexWhere((item) => item.id == product.id);
+    if (index >= 0) {
+      _items[index] = product;
+      notifyListeners();
+    }
+  }
+
+  void deleteProduct(String id) {
+    final index = _items.indexWhere((item) => item.id == id);
+    if (index >= 0) {
+      _items.removeAt(index);
+      notifyListeners();
     }
   }
 }

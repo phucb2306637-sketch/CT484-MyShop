@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/product.dart';
+import 'products_manager.dart';
 
 class UserProductListTile extends StatelessWidget {
   final Product product;
@@ -34,7 +36,6 @@ class UserProductListTile extends StatelessWidget {
         width: 100,
         child: Row(
           children: [
-            // Bắt sự kiện nổ SnackBar khi bấm nút Sửa (Cây bút)
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
@@ -47,16 +48,20 @@ class UserProductListTile extends StatelessWidget {
               },
               color: Theme.of(context).primaryColor,
             ),
-            // Bắt sự kiện nổ SnackBar khi bấm nút Xóa (Thùng rác)
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Delete a product'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                context.read<ProductsManager>().deleteProduct(product.id!);
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Product deleted',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
               },
               color: Theme.of(context).colorScheme.error,
             ),

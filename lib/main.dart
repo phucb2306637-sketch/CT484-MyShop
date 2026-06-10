@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:myshop/ui/products/products_manager.dart';
+import 'package:myshop/ui/cart/cart_manager.dart'; // Import thêm file quản lý giỏ hàng
+import 'package:myshop/ui/orders/order_manager.dart';
 
 import 'ui/screens.dart';
 
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
           path: '/products/:productId',
           pageBuilder: (context, state) {
             final productId = state.pathParameters['productId']!;
-            final product = ProductsManager().findById(productId)!;
+            final product = context.read<ProductsManager>().findById(productId)!;
             
             return CustomTransitionPage(
               key: state.pageKey,
@@ -103,6 +105,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => ProductsManager(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => CartManager(), // Thêm vị trí giỏ hàng theo đúng ảnh đề bài
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => OrdersManager(), 
         ),
       ],
       child: MaterialApp.router(

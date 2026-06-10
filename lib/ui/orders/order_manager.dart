@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import '../../models/cart_item.dart';
 import '../../models/order_item.dart';
 
-class OrdersManager {
+class OrdersManager with ChangeNotifier {
   final List<OrderItem> _orders = [
     OrderItem(
       id: 'o1',
@@ -10,7 +11,6 @@ class OrdersManager {
         CartItem(
           id: 'c1',
           title: 'Red Shirt',
-          // Đã hiệu chỉnh từ link mạng cũ sang đường dẫn asset cục bộ để tránh lỗi hiển thị
           imageUrl: 'assets/img/red_shirt.jpg',
           price: 29.99,
           quantity: 2,

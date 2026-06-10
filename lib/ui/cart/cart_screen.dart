@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'cart_manager.dart';
 import 'cart_item_card.dart';
 
-// ==========================================================================
-// 1. MÀN HÌNH CHÍNH: CART SCREEN
-// ==========================================================================
+
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final cart = CartManager();
+    
+    final cart = context.watch<CartManager>();
 
     return Scaffold(
       appBar: AppBar(
@@ -35,9 +35,7 @@ class CartScreen extends StatelessWidget {
   }
 }
 
-// ==========================================================================
-// 2. WIDGET DANH SÁCH SẢN PHẨM: CART ITEM LIST
-// ==========================================================================
+
 class CartItemList extends StatelessWidget {
   const CartItemList(
     this.cart, {
@@ -61,9 +59,7 @@ class CartItemList extends StatelessWidget {
   }
 }
 
-// ==========================================================================
-// 3. WIDGET TÓM TẮT ĐƠN HÀNG: CART SUMMARY
-// ==========================================================================
+
 class CartSummary extends StatelessWidget {
   const CartSummary({
     super.key,
@@ -90,7 +86,6 @@ class CartSummary extends StatelessWidget {
             const Spacer(),
             Chip(
               label: Text(
-                // Đổi sang nháy kép để hiển thị đúng giá trị số tiền dạng $59.98
                 "\$${cart.totalAmount.toStringAsFixed(2)}",
                 style: Theme.of(context).primaryTextTheme.titleLarge,
               ),

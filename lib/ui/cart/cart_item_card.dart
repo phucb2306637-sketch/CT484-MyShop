@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../../models/cart_item.dart';
 import '../shared/dialog_utils.dart';
+import 'cart_manager.dart';
 
 class CartItemCard extends StatelessWidget {
   final String productId;
@@ -39,7 +40,7 @@ class CartItemCard extends StatelessWidget {
         );
       },
       onDismissed: (direction) {
-        print('Cart item dismissed');
+        context.read<CartManager>().clearItem(productId);
       },
       child: ItemInfoCard(cartItem),
     );
@@ -74,9 +75,9 @@ class ItemInfoCard extends StatelessWidget {
             ),
           ),
           title: Text(cartItem.title),
-          // Sửa đổi phần leading: ClipRRect sang nháy kép để tính toán chính xác tổng tiền của item
+
           subtitle: Text("Total: \$${(cartItem.price * cartItem.quantity)}"),
-          // Sửa đổi phần trailing sang nháy kép để hiển thị số lượng dạng: 2 x $29.99
+          
           trailing: Text(
             "${cartItem.quantity} x \$${cartItem.price}",
             style: Theme.of(context).textTheme.titleMedium,

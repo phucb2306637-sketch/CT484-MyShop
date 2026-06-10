@@ -10,8 +10,6 @@ class UserProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsManager = context.watch<ProductsManager>();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Products'),
@@ -31,16 +29,20 @@ class UserProductsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: productsManager.itemCount,
-          itemBuilder: (_, i) => Column(
-            children: [
-              UserProductListTile(
-                productsManager.items[i],
+        child: Consumer<ProductsManager>(
+          builder: (_, productsManager, __) {
+            return ListView.builder(
+              itemCount: productsManager.itemCount,
+              itemBuilder: (_, i) => Column(
+                children: [
+                  UserProductListTile(
+                    productsManager.items[i],
+                  ),
+                  const Divider(),
+                ],
               ),
-              const Divider(),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
