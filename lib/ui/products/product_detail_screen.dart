@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../models/product.dart';
+import '../cart/cart_manager.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = '/product-detail';
@@ -60,12 +61,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   SizedBox(
                     height: 320,
                     width: double.infinity,
-                    child: Image.network(
+                    child: Image.asset(
                       currentProduct.imageUrl,
                       fit: BoxFit.cover,
-                      headers: const {
-                        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36',
-                      },
+                      
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -114,10 +113,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     color: isSelected ? Colors.purple : Colors.transparent,
                                     width: 2,
                                   ),
-                                ),
-                                child: CircleAvatar(
-                                  radius: 16,
-                                  backgroundColor: Color(colorHex),
                                 ),
                               ),
                             );
@@ -204,8 +199,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               backgroundColor: Colors.white,
               onPressed: () {
                 currentProduct.toggleFavoriteStatus();
-                
-                debugPrint('Toggled Favorite Status for: ${currentProduct.title}');
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -252,8 +245,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       onPressed: () {
-                        debugPrint('Event triggered: Added $_quantity item(s) of [${currentProduct.title}] (Size: $_selectedSize, Color hex: $_selectedColor) to Cart.');
-                        
+                        context.read<CartManager>().addItem(currentProduct);
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
