@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -63,17 +64,26 @@ class ProductGridTile extends StatelessWidget {
           onTap: () {
             context.push('/products/${product.id}');
           },
-          child: Image.asset(
-            product.imageUrl,
-            fit: BoxFit.cover,
-            
-            errorBuilder: (ctx, error, stackTrace) {
-              return Container(
-                color: Colors.grey[300],
-                child: const Icon(Icons.image, color: Colors.grey, size: 40),
-              );
-            },
-          ),
+          child: product.featuredImage != null
+              ? Image.file(
+                  product.featuredImage!,
+                  fit: BoxFit.cover,
+                )
+              : product.imageUrl.startsWith('assets/img/')
+                  ? Image.asset(
+                      product.imageUrl,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      product.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (ctx, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.image, color: Colors.grey, size: 40),
+                        );
+                      },
+                    ),
         ),
       ),
     );
