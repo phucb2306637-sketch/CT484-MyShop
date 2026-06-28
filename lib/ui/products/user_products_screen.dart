@@ -5,10 +5,23 @@ import '../shared/app_drawer.dart';
 import 'products_manager.dart';
 import 'user_product_list_tile.dart';
 
-class UserProductsScreen extends StatelessWidget {
+class UserProductsScreen extends StatefulWidget {
   static const routeName = '/user-products';
 
   const UserProductsScreen({super.key});
+
+  @override
+  State<UserProductsScreen> createState() => _UserProductsScreenState();
+}
+
+class _UserProductsScreenState extends State<UserProductsScreen> {
+  late Future<void> _fetchUserProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProducts = context.read<ProductsManager>().fetchUserProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +38,37 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Consumer<ProductsManager>(
-          builder: (_, productsManager, __) {
-            return ListView.builder(
-              itemCount: productsManager.itemCount,
-              itemBuilder: (_, i) => Column(
-                children: [
-                  UserProductListTile(
-                    productsManager.items[i],
-                  ),
-                  const Divider(),
-                ],
-              ),
+      body: FutureBuilder(
+        future: _fetchUserProducts,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ),
+          }
+          return RefreshIndicator(
+            onRefresh: () =>
+                context.read<ProductsManager>().fetchUserProducts(),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Consumer<ProductsManager>(
+                builder: (_, productsManager, __) {
+                  return ListView.builder(
+                    itemCount: productsManager.itemCount,
+                    itemBuilder: (_, i) => Column(
+                      children: [
+                        UserProductListTile(
+                          productsManager.items[i],
+                        ),
+                        const Divider(),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }

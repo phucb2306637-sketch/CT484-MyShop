@@ -5,7 +5,8 @@ import '../../services/products_service.dart';
 class ProductsManager with ChangeNotifier {
   final ProductsService _productsService = ProductsService(); 
 
-  final List<Product> _items = [
+  // Đổi từ final sang non-final (List<Product> _items) để có thể gán lại danh sách khi fetch dữ liệu từ PocketBase
+  List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -58,6 +59,18 @@ class ProductsManager with ChangeNotifier {
     }
   }
 
+  Future<void> fetchProducts() async {
+    _items = await _productsService.fetchProducts();
+    notifyListeners();
+  }
+
+  Future<void> fetchUserProducts() async {
+    _items = await _productsService.fetchProducts(
+      filteredByUser: true,
+    );
+    notifyListeners();
+  }
+
   Future<void> addProduct(Product product) async {
     final newProduct = await _productsService.addProduct(product);
     if (newProduct != null) {
@@ -67,12 +80,12 @@ class ProductsManager with ChangeNotifier {
   }
 
   Future<void> updateProduct(Product product) async {
-  final index = _items.indexWhere((item) => item.id == product.id);
-  if (index >= 0) {
-    _items[index] = product;
-    notifyListeners();
+    final index = _items.indexWhere((item) => item.id == product.id);
+    if (index >= 0) {
+      _items[index] = product;
+      notifyListeners();
+    }
   }
-}
 
   void deleteProduct(String id) {
     final index = _items.indexWhere((item) => item.id == id);
