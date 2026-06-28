@@ -1,47 +1,40 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
-
 import '../../models/user.dart';
+import '../../services/auth_service.dart';
+import '../../services/pocketbase_client.dart';
 
 class AuthManager with ChangeNotifier {
+  late final AuthService _authService;
   User? _loggedInUser;
 
-  bool get isAuth {
-    return _loggedInUser != null;
+  User? get loggedInUser => _loggedInUser;
+  bool get isAuth => _loggedInUser != null;
+
+  AuthManager() {
+    _authService = AuthService(onAuthChange: (User? user) {
+      _loggedInUser = user;
+      notifyListeners();
+    });
   }
 
-  User? get user {
-    return _loggedInUser;
+  Future<User> signup(String email, String password) async {
+    return _authService.signup(email, password);
   }
 
-  Future<User> signup(String email, String password) {
-    _loggedInUser = User(
-      id: '1',
-      username: 'test',
-      email: email,
-    );
-    notifyListeners();
-    return Future.value(_loggedInUser);
-  }
-
-  Future<User> login(String email, String password) {
-    _loggedInUser = User(
-      id: '1',
-      username: 'test',
-      email: email,
-    );
-    notifyListeners();
-    return Future.value(_loggedInUser);
+  Future<User> login(String email, String password) async {
+    return _authService.login(email, password);
   }
 
   Future<void> tryAutoLogin() async {
-    return Future.value();
+    final user = await _authService.getUserFromStore();
+    if (user != null) {
+      _loggedInUser = user;
+      notifyListeners();
+    }
   }
 
   Future<void> logout() async {
-    _loggedInUser = null;
-    notifyListeners();
-    return Future.value();
+    return _authService.logout();
   }
 }

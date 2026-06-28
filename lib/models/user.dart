@@ -29,7 +29,7 @@ class User {
     );
   }
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> json, String token) {
     return User(
       id: json['id'],
       username: json['username'],

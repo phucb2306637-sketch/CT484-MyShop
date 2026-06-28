@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:myshop/ui/products/products_manager.dart';
@@ -8,7 +9,8 @@ import 'package:myshop/ui/orders/order_manager.dart';
 import 'ui/auth/auth_manager.dart';
 import 'ui/screens.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -68,9 +70,16 @@ class _MyAppState extends State<MyApp> {
           builder: (context, state) {
             return FutureBuilder(
               future: context.read<AuthManager>().logout(),
-              builder: (context, authSnapshot) => const SafeArea(
-                child: SplashScreen(),
-              ),
+              builder: (context, authSnapshot) {
+                if (authSnapshot.connectionState == ConnectionState.done) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    context.go('/auth');
+                  });
+                }
+                return const SafeArea(
+                  child: SplashScreen(),
+                );
+              },
             );
           },
         ),
