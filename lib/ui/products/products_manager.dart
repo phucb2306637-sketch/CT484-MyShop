@@ -82,16 +82,22 @@ class ProductsManager with ChangeNotifier {
   Future<void> updateProduct(Product product) async {
     final index = _items.indexWhere((item) => item.id == product.id);
     if (index >= 0) {
-      _items[index] = product;
-      notifyListeners();
+      final newProduct = await _productsService.updateProduct(product);
+      if (newProduct != null) {
+        _items[index] = newProduct;
+        notifyListeners();
+      }
     }
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
     final index = _items.indexWhere((item) => item.id == id);
     if (index >= 0) {
-      _items.removeAt(index);
-      notifyListeners();
+      final isDeleted = await _productsService.deleteProduct(id);
+      if (isDeleted) {
+        _items.removeAt(index);
+        notifyListeners();
+      }
     }
   }
 }
